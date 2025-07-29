@@ -357,6 +357,7 @@ const OperationExecuteForm: React.FunctionComponent<{
       <ActionGroup>
         <Button
           key={`operation-action-execute-${name}`}
+          type='submit
           variant='danger'
           onClick={execute}
           size='sm'
