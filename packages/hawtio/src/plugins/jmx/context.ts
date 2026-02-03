@@ -4,7 +4,6 @@ import { MBeanNode, MBeanTree, workspace } from '@hawtiosrc/plugins/shared'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { log, pluginName } from './globals'
-
 import { decodeNodePath, PARAM_KEY_NODE } from './utils'
 
 /**
