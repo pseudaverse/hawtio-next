@@ -12,8 +12,7 @@ type NavItem = {
   component: JSX.Element
 }
 export const Runtime: React.FunctionComponent = () => {
-  const location = useLocation()
-
+  const { pathname, search } = useLocation()
   const navItems: NavItem[] = [
     { id: 'sysprops', title: 'System properties', component: <SysProps /> },
     { id: 'metrics', title: 'Metrics', component: <Metrics /> },
@@ -31,8 +30,8 @@ export const Runtime: React.FunctionComponent = () => {
           <Nav aria-label='Runtime Nav' variant='tertiary'>
             <NavList>
               {navItems.map(navItem => (
-                <NavItem key={navItem.id} isActive={location.pathname === `/runtime/${navItem.id}`}>
-                  <NavLink to={navItem.id}>{navItem.title}</NavLink>
+                <NavItem key={navItem.id} isActive={pathname === `/runtime/${navItem.id}`}>
+                  <NavLink to={{ pathname: navItem.id, search }}>{navItem.title}</NavLink>
                 </NavItem>
               ))}
             </NavList>
@@ -41,14 +40,14 @@ export const Runtime: React.FunctionComponent = () => {
       </PageGroup>
       <Divider />
       <PageSection
-        variant={location.pathname.includes('metrics') ? 'default' : 'light'}
-        padding={{ default: location.pathname.includes('metrics') ? 'padding' : 'noPadding' }}
+        variant={pathname.includes('metrics') ? 'default' : 'light'}
+        padding={{ default: pathname.includes('metrics') ? 'padding' : 'noPadding' }}
       >
         <Routes>
           {navItems.map(navItem => (
             <Route key={navItem.id} path={navItem.id} element={navItem.component} />
           ))}
-          <Route path='/' element={<Navigate to='sysprops' />} />
+          <Route path='/' element={<Navigate to={{ pathname: 'sysprops', search }} />} />
         </Routes>
       </PageSection>
     </React.Fragment>

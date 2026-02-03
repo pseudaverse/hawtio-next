@@ -12,7 +12,7 @@ preferencesRegistry.add('home', 'Home', HomePreferences, 1)
 preferencesRegistry.add('console-logs', 'Console Logs', LogsPreferences, 2)
 
 export const HawtioPreferences: React.FunctionComponent = () => {
-  const location = useLocation()
+  const { pathname, search } = useLocation()
   return (
     <React.Fragment>
       <PageSection variant={PageSectionVariants.light}>
@@ -23,8 +23,8 @@ export const HawtioPreferences: React.FunctionComponent = () => {
         <Nav aria-label='Nav' variant='tertiary'>
           <NavList>
             {preferencesRegistry.getPreferences().map(prefs => (
-              <NavItem key={prefs.id} isActive={location.pathname === `/preferences/${prefs.id}`}>
-                <NavLink to={prefs.id}>{prefs.title}</NavLink>
+              <NavItem key={prefs.id} isActive={pathname === `/preferences/${prefs.id}`}>
+                <NavLink to={{ pathname: prefs.id, search }}>{prefs.title}</NavLink>
               </NavItem>
             ))}
           </NavList>
@@ -36,7 +36,7 @@ export const HawtioPreferences: React.FunctionComponent = () => {
           {preferencesRegistry.getPreferences().map(prefs => (
             <Route key={prefs.id} path={prefs.id} element={React.createElement(prefs.component)} />
           ))}
-          <Route path='/' element={<Navigate to={'home'} />} />
+          <Route path='/' element={<Navigate to={{ pathname: 'home', search }} />} />
         </Routes>
       </PageSection>
     </React.Fragment>
