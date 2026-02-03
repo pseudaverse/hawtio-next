@@ -5,7 +5,6 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import './JmxTreeView.css'
 import { MBeanTreeContext } from './context'
 import { pluginPath } from './globals'
-
 import { encodeNodePath, PARAM_KEY_NODE } from './utils'
 
 /**
@@ -66,8 +65,7 @@ export const JmxTreeView: React.FunctionComponent = () => {
     setSelectedNode(node)
 
     // Update URL with the node's path, preserving existing query params
-    const nodePath = node.path()
-    const encodedPath = encodeNodePath(nodePath)
+    const encodedPath = encodeNodePath(node.path())
 
     // Preserve existing search params and add/update nid
     const searchParams = new URLSearchParams(location.search)
