@@ -84,12 +84,16 @@ type HawtioBrandProps = {
 }
 
 const HawtioBrand: React.FunctionComponent<HawtioBrandProps> = props => {
+  const location = useLocation()
   const appLogo = props.hawtconfig.branding?.appLogoUrl ?? hawtioLogo
   const appName = props.hawtconfig.branding?.appName ?? DEFAULT_APP_NAME
   const showAppName = props.hawtconfig.branding?.showAppName ?? false
 
   return (
-    <MastheadBrand id='hawtio-header-brand' component={props => <Link to='/' {...props} />}>
+    <MastheadBrand
+      id='hawtio-header-brand'
+      component={props => <Link to={{ pathname: '/', search: location.search }} {...props} />}
+    >
       <Brand src={appLogo} alt={appName} />
       {showAppName && (
         <Title headingLevel='h1' size='xl'>
@@ -137,7 +141,7 @@ const HawtioHeaderToolbar: React.FunctionComponent<HawtioHeaderToolbarProps> = p
 
   const helpItems = [
     <DropdownItem key='help'>
-      <Link to='../help'>Help</Link>{' '}
+      <Link to={{ pathname: '../help', search: location.search }}>Help</Link>{' '}
     </DropdownItem>,
     <DropdownItem key='about' onClick={onAboutToggle}>
       About
@@ -146,7 +150,7 @@ const HawtioHeaderToolbar: React.FunctionComponent<HawtioHeaderToolbarProps> = p
 
   const userItems = [
     <DropdownItem key='preferences'>
-      <Link to='../preferences'>Preferences</Link>
+      <Link to={{ pathname: '../preferences', search: location.search }}>Preferences</Link>
     </DropdownItem>,
     <DropdownItem key='logout' onClick={logout}>
       Log out

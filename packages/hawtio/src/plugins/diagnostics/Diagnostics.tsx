@@ -10,7 +10,7 @@ type NavItem = {
   component: JSX.Element
 }
 export const Diagnostics: React.FunctionComponent = () => {
-  const location = useLocation()
+  const { pathname, search } = useLocation()
 
   const navItems: NavItem[] = [{ id: 'jfr', title: 'Flight Recorder', component: <FlightRecorder /> }]
 
@@ -25,8 +25,8 @@ export const Diagnostics: React.FunctionComponent = () => {
           <Nav aria-label='Diagnostics Nav' variant='tertiary'>
             <NavList>
               {navItems.map(navItem => (
-                <NavItem key={navItem.id} isActive={location.pathname === `/diagnostics/${navItem.id}`}>
-                  <NavLink to={navItem.id}>{navItem.title}</NavLink>
+                <NavItem key={navItem.id} isActive={pathname === `/diagnostics/${navItem.id}`}>
+                  <NavLink to={{ pathname: navItem.id, search }}>{navItem.title}</NavLink>
                 </NavItem>
               ))}
             </NavList>
@@ -39,7 +39,7 @@ export const Diagnostics: React.FunctionComponent = () => {
           {navItems.map(navItem => (
             <Route key={navItem.id} path={navItem.id} element={navItem.component} />
           ))}
-          <Route path='/' element={<Navigate to='jfr' />} />
+          <Route path='/' element={<Navigate to={{ pathname: 'jfr', search }} />} />
         </Routes>
       </PageSection>
     </React.Fragment>

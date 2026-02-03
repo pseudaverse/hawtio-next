@@ -117,11 +117,6 @@ class ConnectService implements IConnectService {
         sessionStorage.setItem(SESSION_KEY_CURRENT_CONNECTION, JSON.stringify(connId))
       }
 
-      // clear "con" parameter - will be available in session storage only
-      searchParams.delete(PARAM_KEY_CONNECTION, idOrName)
-      url.search = searchParams.toString()
-      window.history.replaceState(null, '', url)
-
       return connId
     }
 

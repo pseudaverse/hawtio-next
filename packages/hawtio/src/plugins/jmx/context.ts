@@ -2,8 +2,10 @@ import { EVENT_REFRESH, eventService } from '@hawtiosrc/core'
 import { PluginNodeSelectionContext } from '@hawtiosrc/plugins'
 import { MBeanNode, MBeanTree, workspace } from '@hawtiosrc/plugins/shared'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { pluginName, pluginPath } from './globals'
+import { useSearchParams } from 'react-router-dom'
+import { log, pluginName } from './globals'
+
+import { decodeNodePath, PARAM_KEY_NODE } from './utils'
 
 /**
  * Custom React hook for using JMX MBean tree.
@@ -12,7 +14,7 @@ export function useMBeanTree() {
   const [tree, setTree] = useState(MBeanTree.createEmpty(pluginName))
   const [loaded, setLoaded] = useState(false)
   const { selectedNode, setSelectedNode } = useContext(PluginNodeSelectionContext)
-  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
 
   /*
    * Need to preserve the selected node between re-renders since the
@@ -22,10 +24,43 @@ export function useMBeanTree() {
   const refSelectedNode = useRef<MBeanNode | null>()
   refSelectedNode.current = selectedNode
 
+  /**
+   * Restore the selected node from the URL parameter if present
+   */
+  const restoreNodeFromUrl = (wkspTree: MBeanTree): MBeanNode | null => {
+    const nodeIdParam = searchParams.get(PARAM_KEY_NODE)
+    if (!nodeIdParam) return null
+
+    try {
+      const path = decodeNodePath(nodeIdParam)
+      const node = wkspTree.navigate(...path)
+
+      if (node) {
+        // Expand ancestors to make the node visible
+        wkspTree.forEach(path, n => {
+          n.defaultExpanded = true
+        })
+      }
+
+      return node
+    } catch (error) {
+      log.error('Failed to restore node from URL:', error)
+      return null
+    }
+  }
+
   const populateTree = async () => {
     const wkspTree: MBeanTree = await workspace.getTree()
     setTree(wkspTree)
 
+    // First, try to restore node from URL
+    const urlNode = restoreNodeFromUrl(wkspTree)
+    if (urlNode) {
+      setSelectedNode(urlNode)
+      return
+    }
+
+    // If no URL node, try to restore previously selected node
     if (!refSelectedNode.current) return
 
     const path = [...refSelectedNode.current.path()]
@@ -38,9 +73,6 @@ export function useMBeanTree() {
     // Ensure the new version of the selected node is selected
     const newSelected = wkspTree.navigate(...path)
     if (newSelected) setSelectedNode(newSelected)
-
-    /* On population of tree, ensure the url path is returned to the base plugin path */
-    navigate(pluginPath)
   }
 
   useEffect(() => {
