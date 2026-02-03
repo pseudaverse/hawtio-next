@@ -2,6 +2,7 @@ import { userService } from '@hawtiosrc/auth'
 import { camelTreeProcessor } from '@hawtiosrc/plugins/camel/tree-processor'
 import { MBeanTree, jolokiaService, workspace } from '@hawtiosrc/plugins/shared'
 import { render, screen } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom'
 import fs from 'fs'
 import path from 'path'
 import { CamelTreeView } from './CamelTreeView'
@@ -65,9 +66,11 @@ describe('CamelTreeView', () => {
     expect(domainNode).toBeNull()
 
     render(
-      <CamelContext.Provider value={{ tree, selectedNode, setSelectedNode }}>
-        <CamelTreeView />
-      </CamelContext.Provider>,
+      <MemoryRouter>
+        <CamelContext.Provider value={{ tree, selectedNode, setSelectedNode }}>
+          <CamelTreeView />
+        </CamelContext.Provider>
+      </MemoryRouter>,
     )
 
     const domainItem = screen.queryByLabelText(jmxDomain)
