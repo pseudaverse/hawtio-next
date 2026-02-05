@@ -2,7 +2,7 @@ import { EVENT_REFRESH, eventService } from '@hawtiosrc/core'
 import { PluginNodeSelectionContext } from '@hawtiosrc/plugins'
 import { MBeanNode, MBeanTree, workspace } from '@hawtiosrc/plugins/shared'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { log, pluginName } from './globals'
 import { decodeNodePath, PARAM_KEY_NODE } from './utils'
 
@@ -13,6 +13,7 @@ export function useMBeanTree() {
   const [tree, setTree] = useState(MBeanTree.createEmpty(pluginName))
   const [loaded, setLoaded] = useState(false)
   const { selectedNode, setSelectedNode } = useContext(PluginNodeSelectionContext)
+  const navigate = useNavigate()
   const [searchParams] = useSearchParams()
 
   /*
@@ -26,8 +27,7 @@ export function useMBeanTree() {
   /**
    * Restore the selected node from the URL parameter if present
    */
-  const restoreNodeFromUrl = (wkspTree: MBeanTree): MBeanNode | null => {
-    const nodeIdParam = searchParams.get(PARAM_KEY_NODE)
+  const restoreNodeFromUrl = (wkspTree: MBeanTree, nodeIdParam: string | null): MBeanNode | null => {
     if (!nodeIdParam) return null
 
     try {
@@ -52,14 +52,23 @@ export function useMBeanTree() {
     const wkspTree: MBeanTree = await workspace.getTree()
     setTree(wkspTree)
 
-    // First, try to restore node from URL
-    const urlNode = restoreNodeFromUrl(wkspTree)
+    const nodeId = searchParams.get(PARAM_KEY_NODE)
+
+    // Try to restore node from URL
+    const urlNode = restoreNodeFromUrl(wkspTree, nodeId)
     if (urlNode) {
       setSelectedNode(urlNode)
       return
     }
 
-    // If no URL node, try to restore previously selected node
+    // If the URL contained a nid param, it was invalid. We should clear it on current URL.
+    if (nodeId) {
+      const currentSearchParams = new URLSearchParams(window.location.search)
+      currentSearchParams.delete(PARAM_KEY_NODE)
+      const query = currentSearchParams.toString()
+      navigate(`?${query}`)
+    }
+
     if (!refSelectedNode.current) return
 
     const path = [...refSelectedNode.current.path()]
