@@ -49,11 +49,6 @@ export type Hawtconfig = {
    * Configuration for Hawtio Online.
    */
   online?: OnlineConfig
-
-  /**
-   * Configuration for remote connections.
-   */
-  connect?: ConnectConfig
 }
 
 /**
@@ -154,14 +149,6 @@ export type OnlineConfig = {
    * @see https://github.com/hawtio/hawtio-online/issues/64
    */
   projectSelector?: string
-}
-
-/**
- * Connect plugin configuration type.
- */
-export type ConnectConfig = {
-  // Whether to keep the 'con' (connection) query parameter in the URL. (default: false)
-  useConnectionParam?: boolean
 }
 
 /**

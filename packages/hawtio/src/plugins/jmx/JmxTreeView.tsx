@@ -1,11 +1,11 @@
 import { MBeanNode, MBeanTree, PluginTreeViewToolbar } from '@hawtiosrc/plugins/shared'
 import { TreeView, TreeViewDataItem } from '@patternfly/react-core'
 import React, { ChangeEvent, useContext, useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import './JmxTreeView.css'
 import { MBeanTreeContext } from './context'
 import { pluginPath } from './globals'
-import { encodeNodePath, PARAM_KEY_NODE } from './utils'
+import { buildNidUrl } from './utils'
 
 /**
  * Expansion requires more than 2 states since the expandAll
@@ -32,7 +32,6 @@ export const JmxTreeView: React.FunctionComponent = () => {
   const [expanded, setExpanded] = useState(ExpansionValue.Default)
   const [filteredTree, setFilteredTree] = useState(tree.getTree())
   const navigate = useNavigate()
-  const location = useLocation()
 
   /**
    * Listen for changes to the tree that may occur as a result
@@ -63,16 +62,7 @@ export const JmxTreeView: React.FunctionComponent = () => {
   const onSelect = (event: React.MouseEvent<Element, MouseEvent>, item: TreeViewDataItem) => {
     const node = item as MBeanNode
     setSelectedNode(node)
-
-    // Update URL with the node's path, preserving existing query params
-    const encodedPath = encodeNodePath(node.path())
-
-    // Preserve existing search params and add/update nid
-    const searchParams = new URLSearchParams(location.search)
-    searchParams.set(PARAM_KEY_NODE, encodedPath)
-
-    // Navigate to base plugin path with all query parameters
-    navigate(`${pluginPath}?${searchParams.toString()}`)
+    navigate(buildNidUrl(node.path(), pluginPath))
   }
 
   const setAllExpanded = (value: boolean) => {

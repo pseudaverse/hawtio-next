@@ -117,14 +117,10 @@ class ConnectService implements IConnectService {
         sessionStorage.setItem(SESSION_KEY_CURRENT_CONNECTION, JSON.stringify(connId))
       }
 
-      // Clear "con" parameter from URL by default - controlled by hawtconfig
-      configManager.getHawtconfig().then(config => {
-        if (!(config.connect?.useConnectionParam ?? false)) {
-          searchParams.delete(PARAM_KEY_CONNECTION)
-          url.search = searchParams.toString()
-          window.history.replaceState(null, '', url)
-        }
-      })
+      // clear "con" parameter - will be available in session storage only
+      searchParams.delete(PARAM_KEY_CONNECTION)
+      url.search = searchParams.toString()
+      window.history.replaceState(null, '', url)
 
       return connId
     }
@@ -327,7 +323,7 @@ class ConnectService implements IConnectService {
   }
 
   generateId(connection: Connection, connections: Connections) {
-    for (; ;) {
+    for (;;) {
       if (!connection.id) {
         // first, generate only for new connection and keep for imported connection
         connection.id = '' + Math.floor(Math.random() * 1000000)

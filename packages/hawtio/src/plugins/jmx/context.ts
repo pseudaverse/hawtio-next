@@ -4,7 +4,7 @@ import { MBeanNode, MBeanTree, workspace } from '@hawtiosrc/plugins/shared'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { log, pluginName } from './globals'
-import { decodeNodePath, PARAM_KEY_NODE } from './utils'
+import { buildNidUrl, decodeNodePath, PARAM_KEY_NODE } from './utils'
 
 /**
  * Custom React hook for using JMX MBean tree.
@@ -80,7 +80,10 @@ export function useMBeanTree() {
 
     // Ensure the new version of the selected node is selected
     const newSelected = wkspTree.navigate(...path)
-    if (newSelected) setSelectedNode(newSelected)
+    if (newSelected) {
+      setSelectedNode(newSelected)
+      navigate(buildNidUrl(path), { replace: true })
+    }
   }
 
   useEffect(() => {
