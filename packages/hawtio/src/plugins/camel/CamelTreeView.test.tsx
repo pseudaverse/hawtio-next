@@ -2,7 +2,6 @@ import { userService } from '@hawtiosrc/auth'
 import { camelTreeProcessor } from '@hawtiosrc/plugins/camel/tree-processor'
 import { MBeanTree, jolokiaService, workspace } from '@hawtiosrc/plugins/shared'
 import { render, screen } from '@testing-library/react'
-import { MemoryRouter } from 'react-router-dom'
 import fs from 'fs'
 import path from 'path'
 import { CamelTreeView } from './CamelTreeView'
@@ -13,13 +12,15 @@ const routesXmlPath = path.resolve(__dirname, 'testdata', 'camel-sample-app-rout
 const sampleRoutesXml = fs.readFileSync(routesXmlPath, { encoding: 'utf8', flag: 'r' })
 
 /**
- * Mock out the useNavigate() to allow the tests to work
+ * Mock out useNavigate() and useLocation() to allow the tests to work
  */
 const mockedUsedNavigate = jest.fn()
+const mockedUseLocation = jest.fn()
 jest.mock('react-router-dom', () => ({
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   ...(jest.requireActual('react-router-dom') as any),
   useNavigate: () => mockedUsedNavigate,
+  useLocation: () => mockedUseLocation,
 }))
 
 /**
@@ -66,11 +67,9 @@ describe('CamelTreeView', () => {
     expect(domainNode).toBeNull()
 
     render(
-      <MemoryRouter>
-        <CamelContext.Provider value={{ tree, selectedNode, setSelectedNode }}>
-          <CamelTreeView />
-        </CamelContext.Provider>
-      </MemoryRouter>,
+      <CamelContext.Provider value={{ tree, selectedNode, setSelectedNode }}>
+        <CamelTreeView />
+      </CamelContext.Provider>,
     )
 
     const domainItem = screen.queryByLabelText(jmxDomain)
