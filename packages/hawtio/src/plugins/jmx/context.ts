@@ -3,7 +3,7 @@ import { PluginNodeSelectionContext } from '@hawtiosrc/plugins'
 import { MBeanNode, MBeanTree, workspace } from '@hawtiosrc/plugins/shared'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { log, pluginName } from './globals'
+import { log, pluginName, pluginPath } from './globals'
 import { buildNidUrl, decodeNodePath, PARAM_KEY_NODE } from './utils'
 
 /**
@@ -82,7 +82,11 @@ export function useMBeanTree() {
     const newSelected = wkspTree.navigate(...path)
     if (newSelected) {
       setSelectedNode(newSelected)
-      navigate(buildNidUrl(path), { replace: true })
+      // Reset to base path with nid to sync URL with restored selection
+      navigate(buildNidUrl(path, pluginPath))
+    } else {
+      // Node no longer exists - clear selection and go to base path
+      navigate(pluginPath)
     }
   }
 
