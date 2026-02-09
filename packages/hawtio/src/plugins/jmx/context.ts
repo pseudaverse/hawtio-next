@@ -61,12 +61,12 @@ export function useMBeanTree() {
       return
     }
 
-    // If the URL contained a nid param, it was invalid. We should clear it on current URL.
+    // If the URL contained a nid param, it was invalid. Clear it and reset to base path.
     if (nodeId) {
       const currentSearchParams = new URLSearchParams(window.location.search)
       currentSearchParams.delete(PARAM_KEY_NODE)
       const query = currentSearchParams.toString()
-      navigate(`?${query}`)
+      navigate(`${pluginPath}${query ? `?${query}` : ''}`)
     }
 
     if (!refSelectedNode.current) return
