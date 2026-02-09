@@ -118,7 +118,7 @@ class ConnectService implements IConnectService {
       }
 
       // clear "con" parameter - will be available in session storage only
-      searchParams.delete(PARAM_KEY_CONNECTION)
+      searchParams.delete(PARAM_KEY_CONNECTION, idOrName)
       url.search = searchParams.toString()
       window.history.replaceState(null, '', url)
 
