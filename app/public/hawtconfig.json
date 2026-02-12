@@ -32,5 +32,8 @@
     ],
     "copyright": "© Hawtio project"
   },
-  "disabledRoutes": ["/disabled"]
+  "disabledRoutes": ["/disabled"],
+  "connect": {
+    "useConnectionParam": true
+  }
 }
