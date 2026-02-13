@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.0.0-dev.1](https://github.com/hawtio/hawtio-react/compare/v2.0.0-dev.0...v2.0.0-dev.1) (2026-02-13)
+
+
+### Features
+
+* **jmx:** preserve nid= url query parameter [#903](https://github.com/hawtio/hawtio-react/issues/903) ([b4ea4ee](https://github.com/hawtio/hawtio-react/commit/b4ea4eee798fa3a822e1e422293f450bca3fb905))
+
+
+### Bug Fixes
+
+* **auth:** Provide some information after failed OIDC login (fixes [#1853](https://github.com/hawtio/hawtio-react/issues/1853)) ([f3f3342](https://github.com/hawtio/hawtio-react/commit/f3f33426d866d85e3c43287e433f1355a8ace19e))
+* background of page should conform to theme of browser ([d1434bd](https://github.com/hawtio/hawtio-react/commit/d1434bdd0bd52a263a42345fd42cbcce2b265d97)), closes [#151515](https://github.com/hawtio/hawtio-react/issues/151515)
+* **camel:** add instructions for enabling Endpoints (in/out) / Exchanges tabs to help ([7384569](https://github.com/hawtio/hawtio-react/commit/738456921082fb8e47aefd5a13cc295191acf965)), closes [#1824](https://github.com/hawtio/hawtio-react/issues/1824)
+* Theme changing failure with Patternfly 6 ([828eb7f](https://github.com/hawtio/hawtio-react/commit/828eb7fbcc61417082356e473e82f4da94118283))
+* **ui:** adjust loading page layout ([2aaff91](https://github.com/hawtio/hawtio-react/commit/2aaff91047d0ca7bf56dc1d42ce25049d4d731a7))
+* **ui:** Adjust the tree to PF6 ([8e9fbb4](https://github.com/hawtio/hawtio-react/commit/8e9fbb4640852c408bca388bffdabc1358ef1275))
+
 ## [2.0.0-dev.0](https://github.com/hawtio/hawtio-next/compare/v1.11.3...v2.0.0-dev.0) (2025-12-19)
 
 
