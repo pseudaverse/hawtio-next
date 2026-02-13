@@ -5,7 +5,7 @@ on:
     branches:
       - main
       - 2.x
-      - 1.9.x
+      - 1.x
     paths-ignore:
       - '**.md'
     types:
@@ -17,7 +17,7 @@ on:
     branches:
       - main
       - 2.x
-      - 1.9.x
+      - 1.x
     paths-ignore:
       - '**.md'
 
