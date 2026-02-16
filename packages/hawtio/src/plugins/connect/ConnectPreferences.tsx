@@ -15,9 +15,8 @@ import {
   ModalVariant,
   TextInput,
 } from '@patternfly/react-core'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { configManager } from '@hawtiosrc/core'
 import { RESET } from './connections'
 import { useConnections } from './context'
 import { log } from './globals'
@@ -204,16 +203,7 @@ const JolokiaForm: React.FunctionComponent = () => {
 
 const ConnectionForm: React.FunctionComponent = () => {
   const navigate = useNavigate()
-  const storedValue = connectService.loadUseConnectionParam()
-  const [useConnectionParam, setUseConnectionParam] = useState(storedValue ?? false)
-
-  useEffect(() => {
-    if (storedValue === null) {
-      configManager.getHawtconfig().then(config => {
-        setUseConnectionParam(config.connect?.useConnectionParam ?? false)
-      })
-    }
-  }, [])
+  const [useConnectionParam, setUseConnectionParam] = useState(connectService.loadUseConnectionParam() ?? false)
 
   const applyConnection = () => {
     connectService.saveUseConnectionParam(useConnectionParam)
