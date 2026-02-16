@@ -120,25 +120,12 @@ class ConnectService implements IConnectService {
         sessionStorage.setItem(SESSION_KEY_CURRENT_CONNECTION, JSON.stringify(connId))
       }
 
-      // Clear "con" parameter from URL by default - controlled by localStorage preference
-      // or hawtconfig fallback
-      const clearConnectionParam = () => {
+      // Clear "con" parameter from URL (controlled by Connect plugin preferences)
+      const storedPref = localStorage.getItem(STORAGE_KEY_USE_CONNECTION_PARAM)
+      if (storedPref !== 'true') {
         searchParams.delete(PARAM_KEY_CONNECTION, idOrName)
         url.search = searchParams.toString()
         window.history.replaceState(null, '', url)
-      }
-
-      const storedPref = localStorage.getItem(STORAGE_KEY_USE_CONNECTION_PARAM)
-      if (storedPref !== null) {
-        if (storedPref !== 'true') {
-          clearConnectionParam()
-        }
-      } else {
-        configManager.getHawtconfig().then(config => {
-          if (!config.connect?.useConnectionParam) {
-            clearConnectionParam()
-          }
-        })
       }
 
       return connId
