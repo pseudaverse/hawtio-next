@@ -15,7 +15,7 @@ import { CubesIcon } from '@patternfly/react-icons/dist/esm/icons/cubes-icon'
 import React, { useContext } from 'react'
 import { NavLink, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import './JmxContent.css'
-import { MBeanTreeContext } from './context'
+import { MBeanTreeContext, pluginPathWithNodeId } from './context'
 
 export const JmxContent: React.FunctionComponent = () => {
   const { selectedNode } = useContext(MBeanTreeContext)
@@ -57,6 +57,8 @@ export const JmxContent: React.FunctionComponent = () => {
   /* Filter the nav items to those applicable to the selected node */
   const navItems = allNavItems.filter(nav => nav.isApplicable(selectedNode))
 
+  const searchWithNid = (pluginPathWithNodeId(selectedNode, new URLSearchParams(search)) as { search: string }).search
+
   const mbeanNav = (
     <Nav aria-label='MBean Nav' variant='horizontal-subnav'>
       <NavList>
@@ -91,7 +93,7 @@ export const JmxContent: React.FunctionComponent = () => {
       >
         <Routes>
           {mbeanRoutes}
-          <Route key='root' path='/' element={<Navigate to={{ pathname: navItems[0]?.id ?? '', search }} />} />
+          <Route key='root' path='/' element={<Navigate to={{ pathname: navItems[0]?.id ?? '', search: searchWithNid }} />} />
         </Routes>
       </PageSection>
     </PageGroup>
